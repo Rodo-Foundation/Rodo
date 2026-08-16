@@ -10,7 +10,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 ### Adicionado
 - Nada por enquanto.
 
-## [0.1.0] - 2025-01-15
+## [0.1.0] - 2026-08-16
 
 ### Adicionado
 - Formato binário `.rd` inicial com cabeçalho, tabela de símbolos, dicionário de strings e blocos de dados.
