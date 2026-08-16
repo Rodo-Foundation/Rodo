@@ -1,0 +1,10 @@
+[package]
+name = "rodo"
+version = "0.1.0"
+edition = "2021"
+description = "Rodo SDK para Rust - formato universal de armazenamento compacto .rd"
+license = "MIT"
+
+[dependencies]
+
+[dev-dependencies]
