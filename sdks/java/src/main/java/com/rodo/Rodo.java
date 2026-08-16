@@ -11,7 +11,6 @@ public class Rodo implements Closeable {
     private static final byte VERSION_MAJOR = 1;
     private static final byte VERSION_MINOR = 0;
 
-    // Types
     public static final byte TYPE_NULL = 0x00;
     public static final byte TYPE_BOOL = 0x01;
     public static final byte TYPE_INT = 0x02;
@@ -41,7 +40,7 @@ public class Rodo implements Closeable {
     private int symbolNext = 0;
     private Map<Integer, String> dict = new HashMap<>();
     private int dictNext = 0;
-    private Map<Integer, Value> pairs = new HashMap<>(); // block 1
+    private Map<Integer, Value> pairs = new HashMap<>();
     private boolean dirty = false;
 
     public static Rodo link(String path) throws IOException {
@@ -70,7 +69,7 @@ public class Rodo implements Closeable {
                 addStringToDict(k);
             }
         } else if (value.type == TYPE_ARRAY && value.arrayVal != null) {
-            collectStrings(value, new HashMap<>());
+            collectStrings(value);
         }
         pairs.put(symId, value);
         dirty = true;
@@ -129,17 +128,17 @@ public class Rodo implements Closeable {
         }
     }
 
-    private void collectStrings(Value val, Map<String, Integer> dictMap) {
+    private void collectStrings(Value val) {
         if (val.type == TYPE_STRING) {
             addStringToDict(val.stringVal);
         } else if (val.type == TYPE_MAP) {
             for (Map.Entry<String, Value> e : val.mapVal.entrySet()) {
                 addStringToDict(e.getKey());
-                collectStrings(e.getValue(), dictMap);
+                collectStrings(e.getValue());
             }
         } else if (val.type == TYPE_ARRAY) {
             for (Value item : val.arrayVal) {
-                collectStrings(item, dictMap);
+                collectStrings(item);
             }
         }
     }
@@ -154,7 +153,6 @@ public class Rodo implements Closeable {
             throw new IOException("Magic number inválido");
         }
         DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file.getFD())));
-        // Read symbols
         long symbolCount = readVarint(dis);
         for (long i = 0; i < symbolCount; i++) {
             int id = (int) readVarint(dis);
@@ -162,12 +160,11 @@ public class Rodo implements Closeable {
             byte[] nameBytes = new byte[nameLen];
             dis.readFully(nameBytes);
             String name = new String(nameBytes, StandardCharsets.UTF_8);
-            dis.readByte(); // typeHint
-            dis.readByte(); // flags
+            dis.readByte();
+            dis.readByte();
             symbols.put(name, id);
             if (id > symbolNext) symbolNext = id;
         }
-        // Read dictionary
         long dictCount = readVarint(dis);
         for (long i = 0; i < dictCount; i++) {
             int id = (int) readVarint(dis);
@@ -177,10 +174,9 @@ public class Rodo implements Closeable {
             dict.put(id, new String(strBytes, StandardCharsets.UTF_8));
             if (id > dictNext) dictNext = id;
         }
-        // Read blocks
         long blockCount = readVarint(dis);
         if (blockCount > 0) {
-            readVarint(dis); // block ID
+            readVarint(dis);
             long pairCount = readVarint(dis);
             for (long i = 0; i < pairCount; i++) {
                 int symId = (int) readVarint(dis);
@@ -194,27 +190,24 @@ public class Rodo implements Closeable {
     private void save() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
-        // Header
         dos.writeInt(MAGIC);
         dos.writeByte(VERSION_MAJOR);
         dos.writeByte(VERSION_MINOR);
-        dos.writeByte(0); // flags
+        dos.writeByte(0);
         dos.writeLong(System.currentTimeMillis());
-        dos.writeInt(0); // CRC placeholder
-        // Symbols
+        dos.writeInt(0);
         writeVarint(dos, symbols.size());
         for (Map.Entry<String, Integer> entry : symbols.entrySet()) {
             writeVarint(dos, entry.getValue());
             byte[] nameBytes = entry.getKey().getBytes(StandardCharsets.UTF_8);
             writeVarint(dos, nameBytes.length);
             dos.write(nameBytes);
-            dos.writeByte(0); // typeHint
-            dos.writeByte(0); // flags
+            dos.writeByte(0);
+            dos.writeByte(0);
         }
-        // Dictionary: collect from values
         Map<String, Integer> dictMap = new HashMap<>();
         for (Value val : pairs.values()) {
-            collectStrings(val, dictMap);
+            collectStringsToMap(val, dictMap);
         }
         dict.clear();
         for (Map.Entry<String, Integer> e : dictMap.entrySet()) {
@@ -230,26 +223,43 @@ public class Rodo implements Closeable {
             writeVarint(dos, sBytes.length);
             dos.write(sBytes);
         }
-        // Blocks
-        writeVarint(dos, 1); // block count
-        writeVarint(dos, 1); // block ID
+        writeVarint(dos, 1);
+        writeVarint(dos, 1);
         writeVarint(dos, pairs.size());
         for (Map.Entry<Integer, Value> entry : pairs.entrySet()) {
             writeVarint(dos, entry.getKey());
             writeValue(dos, entry.getValue(), dict);
         }
-        // Metadata
         writeVarint(dos, pairs.size());
         writeVarint(dos, symbols.size());
         writeVarint(dos, dict.size());
         writeVarint(dos, baos.size());
-        dos.writeInt(0); // CRC placeholder
+        dos.writeInt(0);
         dos.flush();
         byte[] data = baos.toByteArray();
         file.setLength(0);
         file.seek(0);
         file.write(data);
         dirty = false;
+    }
+
+    private void collectStringsToMap(Value val, Map<String, Integer> dictMap) {
+        if (val.type == TYPE_STRING) {
+            if (!dictMap.containsKey(val.stringVal)) {
+                dictMap.put(val.stringVal, ++dictNext);
+            }
+        } else if (val.type == TYPE_MAP) {
+            for (Map.Entry<String, Value> e : val.mapVal.entrySet()) {
+                if (!dictMap.containsKey(e.getKey())) {
+                    dictMap.put(e.getKey(), ++dictNext);
+                }
+                collectStringsToMap(e.getValue(), dictMap);
+            }
+        } else if (val.type == TYPE_ARRAY) {
+            for (Value item : val.arrayVal) {
+                collectStringsToMap(item, dictMap);
+            }
+        }
     }
 
     private void writeValue(DataOutputStream dos, Value val, Map<Integer, String> dict) throws IOException {
