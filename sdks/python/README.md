@@ -46,4 +46,5 @@ Documentação
 Testes
 
 ```bash
-python -m unittest tests/tes
+python -m unittest tests/test_rodo.py
+```
