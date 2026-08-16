@@ -168,6 +168,13 @@ O diretório tests/conformance contém casos de teste independentes de linguagem
 
 ---
 
+Repositório
+
+O código-fonte está disponível em:
+https://github.com/rodo-foundation/rodo
+
+---
+
 Licença
 
 Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
