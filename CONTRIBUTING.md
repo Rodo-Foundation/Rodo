@@ -39,7 +39,7 @@ O repositório é um monorepo contendo o núcleo em C e SDKs para várias lingua
 ### Clonando o Repositório
 
 ```bash
-git clone https://github.com/rodo/rodo.git
+git clone https://github.com/rodo-foundation/rodo.git
 cd rodo
 ```
 
