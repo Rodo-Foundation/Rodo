@@ -10,12 +10,12 @@ cmake ..
 cmake --build .
 ```
 
-Testes
+## Testes
 
 ```bash
 ctest
 ```
 
-Uso
+## Uso
 
 Veja include/rodo.h para a API pública.
