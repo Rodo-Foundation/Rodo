@@ -1,0 +1,26 @@
+{
+  "name": "rodo-sdk",
+  "version": "0.1.0",
+  "description": "Rodo SDK para JavaScript - formato universal de armazenamento compacto .rd",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test/rodo.test.js",
+    "install": "node-gyp rebuild"
+  },
+  "keywords": [
+    "rodo",
+    "rd",
+    "storage",
+    "format",
+    "binary",
+    "compact"
+  ],
+  "author": "Equipe Rodo",
+  "license": "MIT",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^4.0.0"
+  },
+  "devDependencies": {}
+}
