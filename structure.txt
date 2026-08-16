@@ -1,0 +1,187 @@
+rodo/
+├── README.md
+├── LICENSE
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── .gitignore
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       └── release.yml
+├── spec/
+│   ├── rodo-format-v1.md
+│   ├── rodo-api.md
+│   ├── rodo-types.md
+│   └── rodo-versioning.md
+├── core/
+│   └── C/
+│       ├── include/
+│       │   ├── rodo.h
+│       │   └── rodo_internal.h
+│       ├── src/
+│       │   ├── rodo.c
+│       │   ├── rodo_format.c
+│       │   ├── rodo_varint.c
+│       │   ├── rodo_symbol.c
+│       │   ├── rodo_dict.c
+│       │   ├── rodo_block.c
+│       │   ├── rodo_crypto.c
+│       │   └── rodo_platform.c
+│       ├── tests/
+│       │   ├── test_basic.c
+│       │   ├── test_types.c
+│       │   ├── test_persistence.c
+│       │   └── test_concurrency.c
+│       ├── CMakeLists.txt
+│       └── README.md
+├── sdks/
+│   ├── javascript/
+│   │   ├── package.json
+│   │   ├── src/
+│   │   │   ├── index.js
+│   │   │   ├── rodo.js
+│   │   │   └── native/
+│   │   │       └── binding.c
+│   │   ├── test/
+│   │   │   └── rodo.test.js
+│   │   └── README.md
+│   ├── python/
+│   │   ├── setup.py
+│   │   ├── rodo/
+│   │   │   ├── __init__.py
+│   │   │   ├── rodo.py
+│   │   │   └── _native/
+│   │   │       └── rodo_bind.c
+│   │   ├── tests/
+│   │   │   └── test_rodo.py
+│   │   └── README.md
+│   ├── rust/
+│   │   ├── Cargo.toml
+│   │   ├── src/
+│   │   │   ├── lib.rs
+│   │   │   ├── ffi.rs
+│   │   │   └── rodo.rs
+│   │   ├── tests/
+│   │   │   └── integration_test.rs
+│   │   └── README.md
+│   ├── go/
+│   │   ├── go.mod
+│   │   ├── rodo.go
+│   │   ├── rodo_test.go
+│   │   └── README.md
+│   ├── java/
+│   │   ├── build.gradle
+│   │   ├── src/
+│   │   │   ├── main/java/com/rodo/Rodo.java
+│   │   │   └── main/native/
+│   │   ├── test/
+│   │   └── README.md
+│   ├── kotlin/
+│   │   ├── build.gradle.kts
+│   │   ├── src/
+│   │   │   ├── main/kotlin/com/rodo/Rodo.kt
+│   │   │   └── test/kotlin/
+│   │   └── README.md
+│   ├── csharp/
+│   │   ├── Rodo.sln
+│   │   ├── Rodo/
+│   │   │   ├── Rodo.csproj
+│   │   │   ├── Rodo.cs
+│   │   │   └── Native/
+│   │   │       └── binding.c
+│   │   ├── Tests/
+│   │   └── README.md
+│   ├── cpp/
+│   │   ├── CMakeLists.txt
+│   │   ├── include/rodo.hpp
+│   │   ├── src/rodo.cpp
+│   │   ├── tests/
+│   │   └── README.md
+│   ├── swift/
+│   │   ├── Package.swift
+│   │   ├── Sources/Rodo/Rodo.swift
+│   │   ├── Tests/RodoTests/
+│   │   └── README.md
+│   ├── dart/
+│   │   ├── pubspec.yaml
+│   │   ├── lib/rodo.dart
+│   │   ├── test/
+│   │   └── README.md
+│   ├── php/
+│   │   ├── composer.json
+│   │   ├── src/Rodo.php
+│   │   ├── tests/
+│   │   └── README.md
+│   └── ruby/
+│       ├── rodo.gemspec
+│       ├── lib/rodo.rb
+│       ├── test/
+│       └── README.md
+├── tests/
+│   ├── conformance/
+│   │   ├── test_cases/
+│   │   │   ├── basic.json
+│   │   │   ├── types.json
+│   │   │   ├── persistence.json
+│   │   │   ├── deletion.json
+│   │   │   └── large_data.json
+│   │   ├── runner/
+│   │   │   ├── run_all.sh
+│   │   │   └── run_sdk.py
+│   │   └── expected/
+│   ├── integration/
+│   │   └── cross_language/
+│   │       ├── js_to_python/
+│   │       └── rust_to_go/
+│   └── fixtures/
+│       ├── empty.rd
+│       ├── basic.rd
+│       └── large.rd
+├── tools/
+│   ├── rodo-inspector/
+│   │   ├── src/
+│   │   │   └── main.c
+│   │   ├── CMakeLists.txt
+│   │   └── README.md
+│   └── rodo-converter/
+│       ├── src/
+│       │   └── main.c
+│       ├── CMakeLists.txt
+│       └── README.md
+├── examples/
+│   ├── javascript/
+│   │   └── basic.js
+│   ├── python/
+│   │   └── basic.py
+│   ├── rust/
+│   │   └── basic.rs
+│   ├── go/
+│   │   └── basic.go
+│   ├── java/
+│   │   └── basic.java
+│   ├── kotlin/
+│   │   └── basic.kt
+│   ├── csharp/
+│   │   └── basic.cs
+│   ├── cpp/
+│   │   └── basic.cpp
+│   ├── swift/
+│   │   └── basic.swift
+│   ├── dart/
+│   │   └── basic.dart
+│   ├── php/
+│   │   └── basic.php
+│   └── ruby/
+│       └── basic.rb
+├── docs/
+│   ├── getting-started.md
+│   ├── api-reference.md
+│   ├── format-specification.md
+│   ├── sdk-guide.md
+│   └── architecture.md
+└── benchmarks/
+    ├── scripts/
+    │   ├── benchmark_size.py
+    │   └── benchmark_speed.py
+    └── results/
+        └── latest.md
